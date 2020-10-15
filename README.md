@@ -1,0 +1,1 @@
+# sample_manipulator_workspace
