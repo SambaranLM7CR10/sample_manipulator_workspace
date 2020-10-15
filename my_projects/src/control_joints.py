@@ -1,12 +1,11 @@
 #! /usr/bin/env python 
 import rospy 
 import tf
-import random
 from mpl_toolkits import mplot3d
 import numpy as np
 import matplotlib.pyplot as plt
-import math
 from std_msgs.msg import Float64
+
 rospy.init_node('control_joint_manipulator')
 pub1 = rospy.Publisher('/manipulator/first_joint_position_controller/command', Float64, queue_size=1)
 pub2 = rospy.Publisher('/manipulator/second_joint_position_controller/command', Float64, queue_size=1)
@@ -19,6 +18,7 @@ x = []
 y = [] 
 z = []
 ctrl_c = False
+
 while not ctrl_c: 
 	motion1 = Float64(); motion2 = Float64(); motion3 = Float64() 
 	for i in np.arange(0,6.3,0.15): 
