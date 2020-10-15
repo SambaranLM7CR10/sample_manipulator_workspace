@@ -1,0 +1,172 @@
+<?xml version = "1.0"?>
+<robot name="manipulator"> 
+	<gazebo>
+		<plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+			<robotNamespace>/manipulator</robotNamespace>
+		</plugin> 
+	</gazebo> 
+ <link name="world"/>
+
+  <joint name="fixed" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+  </joint>
+<link name="base_link"> 
+	<inertial> 
+		<mass value="0.2"/>
+		<origin xyz="0 0 0.1" rpy="0 0 0" /> 
+		<inertia ixx ="0.002" iyy="0.002" izz = "0.002" ixy="0" iyz="0" ixz="0"/>
+	</inertial> 
+	<collision> 
+		<origin xyz="0 0 0.1" rpy="0 0 0"/>
+		<geometry> 
+			<cylinder radius="0.5" length="0.20"/> 
+		</geometry> 
+	</collision> 
+	<visual> 
+		<origin xyz="0 0 0.1" rpy="0 0 0"/>
+		<geometry> 
+			<cylinder radius="0.5" length="0.20"/> 
+		</geometry>
+	</visual> 
+</link> 
+
+<link name="first_link"> 
+	<inertial> 
+		<mass value="0.5"/>
+		<origin xyz="0 0 0.4" rpy="0 0 0" /> 
+		<inertia ixx ="0.004" iyy="0.004" izz = "0.004" ixy="0" iyz="0" ixz="0"/>
+	</inertial> 
+	<collision> 
+		<origin xyz="0 0 0.4" rpy="0 0 0"/>
+		<geometry> 
+			<box size="0.2 0.2 0.8"/> 
+		</geometry> 
+	</collision> 
+	<visual> 
+		<origin xyz="0 0 0.4" rpy="0 0 0"/>
+		<geometry> 
+			<box size="0.2 0.2 0.8"/> 
+		</geometry>
+	</visual> 
+</link>
+<gazebo reference="first_link"> 
+	<kp>1000</kp>
+	<kd>10</kd>
+	<mu1>10</mu1>
+	<mu2>10</mu2>
+</gazebo>
+
+<joint name="first_joint" type="continuous"> 
+	<parent link="base_link"/>
+	<child link="first_link"/>
+	<origin xyz="0 0 0.2" rpy="0 0 0"/>
+	<dynamics damping="0.7"/>
+	<axis xyz="0 0 1"/> 
+</joint> 
+
+<transmission name = "trans1"> 
+	<type>transmission_interface/SimpleTransmission</type> 
+	<joint name="first_joint"> 
+		<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+	</joint> 
+	<actuator name="motor1"> 
+		<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+		<mechanicalReduction>1</mechanicalReduction>
+	</actuator>
+</transmission> 
+
+<link name="second_link"> 
+	<inertial> 
+		<mass value="0.25"/> 
+		<origin xyz="0 0 0.3" rpy="0 0 0"/> 
+		<inertia ixx ="0.004" iyy="0.004" izz = "0.004" ixy="0" iyz="0" ixz="0"/>
+	</inertial>
+	<collision> 
+		<origin xyz="0 0 0.3" rpy="0 0 0"/> 
+		<geometry> 
+			<box size="0.2 0.2 0.6"/>
+		</geometry> 
+	</collision> 
+	<visual> 
+		<origin xyz="0 0 0.3" rpy="0 0 0"/> 
+		<geometry> 
+			<box size="0.2 0.2 0.6"/> 
+		</geometry> 
+	</visual>
+</link> 
+
+<gazebo reference="second_link"> 
+	<kp>1000</kp>
+	<kd>10</kd>
+	<mu1>10</mu1>
+	<mu2>10</mu2>
+</gazebo> 
+
+<joint name="second_joint" type="continuous">
+	<parent link="first_link"/>
+	<child link="second_link"/>
+	<origin xyz="0 0.2 0.7" rpy="0 0 0"/>
+	<dynamics damping="0.7"/>	
+	<axis xyz="0 1 0"/> 
+</joint>
+
+<transmission name="trans2">
+	<type>transmission_interface/SimpleTransmission</type> 
+	<joint name="second_joint"> 
+		<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+	</joint> 
+	<actuator name="motor2"> 
+		<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+		<mechanicalReduction>1</mechanicalReduction>
+	</actuator>
+</transmission> 
+
+<link name="third_link"> 
+	<inertial> 
+		<mass value="0.5"/> 
+		<origin xyz="0 0 0.2" rpy="0 0 0"/> 		
+		<inertia ixx ="0.004" iyy="0.004" izz = "0.004" ixy="0" iyz="0" ixz="0"/>
+	</inertial> 
+	<collision> 
+		<origin xyz="0 0 0.2" rpy="0 0 0"/> 
+		<geometry>
+			<box size="0.2 0.2 0.4"/> 
+		</geometry> 
+	</collision> 
+	<visual>
+		<origin xyz="0 0 0.2" rpy="0 0 0"/> 
+		<geometry>
+			<box size="0.2 0.2 0.4"/> 
+		</geometry>
+	</visual> 
+</link> 
+
+<gazebo reference="third_link">
+	<kp>1000</kp>
+	<kd>10</kd>
+	<mu1>10</mu1>
+	<mu2>10</mu2>
+</gazebo>
+
+<joint name="third_joint" type="continuous">
+	<parent link="second_link"/>
+	<child link="third_link"/>
+	<origin xyz="0 0.2 0.5" rpy="0 0 0"/>
+	<dynamics damping="0.7"/>
+	<axis xyz="0 1 0"/>
+</joint>
+
+<transmission name="trans3">
+	<type>transmission_interface/SimpleTransmission</type>
+	<joint name="third_joint">
+		<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+	</joint>
+	<actuator name="motor3">
+		<hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+		<mechanicalReduction>1</mechanicalReduction>
+	</actuator>
+</transmission>
+</robot> 
+
+
